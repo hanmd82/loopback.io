@@ -62,7 +62,7 @@ As a default, LoopBack comes with some pre-defined component decorators for your
     }
   ```
   
-  An example can be found in [Writing Controller methods](controller.htm#Writing-Controller-methods)
+  More example can be found in [Writing Controller methods](controller.htm#Writing-Controller-methods)
   
 ## Dependency Injection
 
@@ -108,25 +108,25 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 - @authenticate
 
-Mark a controller method as requiring authenticated user, it takes in a strategy name. An example is using BasicStrategy to authenticate user in function `whoAmI`:
+  Mark a controller method as requiring authenticated user, it takes in a strategy name. An example is using BasicStrategy to authenticate user in function `whoAmI`:
 
-```ts
-// my-controller.ts
-import { authenticate } from '@loopback/authentication';
-import { inject } from '@loopback/context';
+  ```ts
+  // my-controller.ts
+  import { authenticate } from '@loopback/authentication';
+  import { inject } from '@loopback/context';
 
-class MyController {
-  constructor(
-    @inject(BindingKeys.Authentication.CURRENT_USER)
-    private user: UserProfile,
-  ) {}
+  class MyController {
+    constructor(
+      @inject(BindingKeys.Authentication.CURRENT_USER)
+      private user: UserProfile,
+    ) {}
 
-  @authenticate('BasicStrategy')
-  async whoAmI() : Promise<string> {
-    return this.user.id;
+    @authenticate('BasicStrategy')
+    async whoAmI() : Promise<string> {
+      return this.user.id;
+    }
   }
-}
-```
+  ```
 
 ## Repository Decorators
 
@@ -134,62 +134,63 @@ class MyController {
 
 - @model
 
-Define a model in a repository, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
+  Define a model in a repository, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
 
 - @property
 
-Define a property in a model, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
+  Define a property in a model, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
 
 ### Relation decorators
 
-*Since relation is still in design phase, examples TBD.*
+  *Since relation is still in design phase, examples TBD.*
 
 - @relation
 
-Register a general relation
+  Register a general relation
 
 - @belongsTo @hasOne @hasMany @embedsOne @embedsMany @referencesOne @referencesMany
 
-Register a specific relation
+  Register a specific relation
 
 ### Repository decorators
 
 - @repository
 
-A Repository is a type of _Service_ that represents a collection of data within a DataSource, the decorator either injects an existing repository or creates a repository from a model and a datasource.
+  A Repository is a type of _Service_ that represents a collection of data within a DataSource, the decorator either injects an existing repository or creates a repository from a model and a datasource.
 
-The injection example can be found in [Repository#controller-configuration](Repositories.html#controller-configuration)
+  The injection example can be found in [Repository#controller-configuration](Repositories.html#controller-configuration)
 
-```ts
-// my-controller.ts
-import { Todo } from '{path_of_Todo_mode}.ts';
-import { juggler, DataSourceConstructor } from '@loopback/repository';
+  ```ts
+  // my-controller.ts
+  import { Todo } from '{path_of_Todo_mode}.ts';
+  import { juggler, DataSourceConstructor } from '@loopback/repository';
 
-const datasource = new DataSourceConstructor({
-  connector: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  database: 'test',
-  password: 'pass',
-  user: 'root',
-});
+  const datasource = new DataSourceConstructor({
+    connector: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    database: 'test',
+    password: 'pass',
+    user: 'root',
+  });
 
-export class TodoController {
-  @repository(Todo, datasource)
-  repository: EntityCrudRepository<Todo, number>;
-  ... ...
-}
-```
-If the model or datasource is already bound to the app, you can create the repository by providing their names instead of the classes. For example:
+  export class TodoController {
+    @repository(Todo, datasource)
+    repository: EntityCrudRepository<Todo, number>;
+    ... ...
+  }
+  ```
+  
+  If the model or datasource is already bound to the app, you can create the repository by providing their names instead of the classes. For example:
 
-```ts
-// with `datasource` and `Todo` already defined.
-app.bind('datasources.ds').to(datasource);
-app.bind('repositories.todo').to(Todo);
+  ```ts
+  // with `datasource` and `Todo` already defined.
+  app.bind('datasources.ds').to(datasource);
+  app.bind('repositories.todo').to(Todo);
 
-export class TodoController {
-  @repository('todo', 'ds')
-  repository: EntityCrudRepository<Todo, number>;
-  ... ...
-}
-```
+  export class TodoController {
+    @repository('todo', 'ds')
+    repository: EntityCrudRepository<Todo, number>;
+    ... ...
+  }
+  ```
