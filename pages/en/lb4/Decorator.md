@@ -25,7 +25,7 @@ As a default, LoopBack comes with some pre-defined component decorators for your
 ## Route Decorators
 - @get, @post, @put, @patch, @del
 
-  Register route for a controller by rest decorator, for their usage, refer to [Routing to Controllers](controller.htm#Routing-to-Controllers)
+  Register route for a controller by rest decorator, for their usage, refer to [Routing to Controllers](controllers.htm#Routing-to-Controllers)
 
 - @api
 
