@@ -14,9 +14,14 @@ A decorator allows you annotate or modify your class declarations and members wi
 
 *If you're new to Decorators in TypeScript, see [here](https://www.typescriptlang.org/docs/handbook/decorators.html) for more info.*
 
-Decorators give LoopBack the flexibility to modify your plain TypeScript classes and properties in a way that allows the framework to better understand how to make use of them, without you needing to inherit base classes or add functions that tie into an API.
+Decorators give LoopBack the flexibility to modify your plain TypeScript classes 
+and properties in a way that allows the framework to better understand how to 
+make use of them, without you needing to inherit base classes or add functions 
+that tie into an API.
 
-Currently LoopBack core provides built-in decorator functions you can use directly by `@myDecorator`, e.g. Route decorators that introduces in section Route-Decorators, and implements a dependency injection system that can apply a decorator by `@inject('myDecorator')`. 
+Currently, LoopBack core provides built-in decorator functions you can use directly
+by `@myDecorator`, e.g. Route decorators that introduces in section Route-Decorators, 
+and implements a dependency injection system that can apply a decorator by `@inject('myDecorator')`. 
 
 As a default, LoopBack comes with some pre-defined component decorators for your use:
 - [authentication](#authentication-decorators)
@@ -25,11 +30,13 @@ As a default, LoopBack comes with some pre-defined component decorators for your
 ## Route Decorators
 - @get, @post, @put, @patch, @del
 
-  Register route for a controller by rest decorator, for their usage, refer to [Routing to Controllers](controllers.htm#Routing-to-Controllers)
+  Register route for a controller by rest decorator, for their usage, refer to 
+  [Routing to Controllers](controllers.htm#Routing-to-Controllers)
 
 - @api
 
-  Register route for a controller by api decorator, more details and example refer to [Specifying Controller APIs](controllers.htm#Specifying-Controller-APIs)
+  Register route for a controller by api decorator, more details and example refer 
+  to [Specifying Controller APIs](controllers.htm#Specifying-Controller-APIs)
 
 - @operation
 
@@ -66,7 +73,8 @@ As a default, LoopBack comes with some pre-defined component decorators for your
   
 ## Dependency Injection
 
-@inject is a decorator to annotate method arguments for automatic injection by LoopBack IoC container. It can only be applied on a **method parameter** or a **property**.
+@inject is a decorator to annotate method arguments for automatic injection by 
+LoopBack IoC container. @inject can only be used on properties or method parameters.
 
 The `@inject` decorator allows you inject dependencies bound to the application context, or
 to any implementation of the [Context](#context) object. You can bind values, class definitions and 
@@ -86,7 +94,8 @@ class MyApp extends Application {
   }
 }
 ```
-Now that we've bound the 'config.widget' key to our configuration object, we can inject it in our WidgetController:
+Now that we've bound the 'config.widget' key to our configuration object, we can
+inject it in our WidgetController:
 
 ```ts
 // widget-controller.ts
@@ -100,15 +109,15 @@ class WidgetController {
 }
 ```
 
-It's been documented as a LoopBack core concept in [Dependency Injection](Dependency-Injection.htm)
 For more information, see the [Dependency Injection](Dependency-Injection.htm) section under [LoopBack Core Concepts](Concepts.htm)
-
 
 ## Authentication Decorator
 
 - @authenticate
 
-  Mark a controller method as requiring authenticated user, it takes in a strategy name. An example is using BasicStrategy to authenticate user in function `whoAmI`:
+  Mark a controller method as requiring authenticated user, takes a strategy name 
+  as a parameter. An example is using 'BasicStrategy' to authenticate user in function
+  `whoAmI`:
 
   ```ts
   // my-controller.ts
@@ -142,7 +151,8 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 ### Relation decorators
 
-  *Since relation is still in design phase, examples TBD.*
+  *This feature has not yet been released in alpha form. Documentation will be* 
+  *added here as this feature progresses.*
 
 - @relation
 
@@ -156,7 +166,9 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 - @repository
 
-  A Repository is a type of _Service_ that represents a collection of data within a DataSource, the decorator either injects an existing repository or creates a repository from a model and a datasource.
+  A repository represents a collection of data and the means to access that data, 
+  the decorator either injects an existing repository or creates a repository 
+  from a model and a datasource.
 
   The injection example can be found in [Repository#controller-configuration](Repositories.html#controller-configuration)
 
@@ -181,7 +193,8 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
   }
   ```
   
-  If the model or datasource is already bound to the app, you can create the repository by providing their names instead of the classes. For example:
+  If the model or datasource is already bound to the app, you can create the 
+  repository by providing their names instead of the classes. For example:
 
   ```ts
   // with `datasource` and `Todo` already defined.
