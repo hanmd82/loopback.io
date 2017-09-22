@@ -31,21 +31,21 @@ As a default, LoopBack also comes with some pre-defined component decorators for
 - [repository](#repository-decorators)
 
 ## Route Decorators
-- @get, @post, @put, @patch, @del
+- `@get`, `@post`, `@put`, `@patch`, `@del`
 
   Register route for a controller by rest decorator, for their usage, refer to 
   [Routing to Controllers](controllers.htm#Routing-to-Controllers)
 
-- @api
+- `@api`
 
   Register route for a controller by api decorator, more details and example refer 
   to [Specifying Controller APIs](controllers.htm#Specifying-Controller-APIs)
 
-- @operation
+- `@operation`
 
   Expose a Controller method as a REST API operation. Usage refer to [TBD in Controllers](controllers.htm#)
 
-- @param
+- `@param`
 
   Describe an input parameter of a Controller method. 
   
@@ -146,11 +146,11 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 ### Model decorators
 
-- @model
+- `@model`
 
   Define a model in a repository, see [define-models](Repositories.html#define-models)
 
-- @property
+- `@property`
 
   Define a property in a model, see [define-models](Repositories.html#define-models)
 
@@ -159,17 +159,17 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
   *This feature has not yet been released in alpha form. Documentation will be* 
   *added here as this feature progresses.*
 
-- @relation
+- `@relation`
 
   Register a general relation
 
-- @belongsTo @hasOne @hasMany @embedsOne @embedsMany @referencesOne @referencesMany
+- `@belongsTo` `@hasOne` `@hasMany` `@embedsOne` `@embedsMany` `@referencesOne` `@referencesMany`
 
   Register a specific relation
 
-### Repository decorators
+### Repository decorator
 
-- @repository
+- `@repository`
 
   A repository represents a collection of data and the means to access that data, 
   the decorator either injects an existing repository or creates a repository 
