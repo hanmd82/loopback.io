@@ -8,7 +8,7 @@ permalink: /doc/en/lb4/Decorators.html
 summary:
 ---
 
-A decorator allows you annotate or modify your class declarations and members with metadata.
+A decorator allows you to annotate or modify your class declarations and members with metadata.
 
 ## Introduction
 
@@ -16,7 +16,7 @@ A decorator allows you annotate or modify your class declarations and members wi
 
 Decorators give LoopBack the flexibility to modify your plain TypeScript classes 
 and properties in a way that allows the framework to better understand how to 
-make use of them, without you needing to inherit base classes or add functions 
+make use of them, without the need to inherit base classes or add functions 
 that tie into an API.
 
 Currently, LoopBack core provides built-in decorator functions you can use directly
@@ -25,7 +25,7 @@ by `@myDecorator`:
 - [route](#route-decorators)
 - [inject](#dependency-injection)
 
-As a default, LoopBack also comes with some pre-defined component decorators for your use:
+As a default, LoopBack also comes with some pre-defined component decorators:
 
 - [authentication](#authentication-decorators)
 - [repository](#repository-decorators)
@@ -33,7 +33,7 @@ As a default, LoopBack also comes with some pre-defined component decorators for
 ## Route Decorators
 - `@get`, `@post`, `@put`, `@patch`, `@del`
 
-  Register route for a controller by rest decorator, for their usage, refer to 
+  Register route for a controller by REST decorator, for their usage, refer to 
   [Routing to Controllers](controllers.htm#Routing-to-Controllers)
 
 - `@api`
