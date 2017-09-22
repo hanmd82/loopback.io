@@ -20,10 +20,13 @@ make use of them, without you needing to inherit base classes or add functions
 that tie into an API.
 
 Currently, LoopBack core provides built-in decorator functions you can use directly
-by `@myDecorator`, e.g. Route decorators that introduces in section Route-Decorators, 
-and implements a dependency injection system that can apply a decorator by `@inject('myDecorator')`. 
+by `@myDecorator`:
 
-As a default, LoopBack comes with some pre-defined component decorators for your use:
+- [route](#route-decorators)
+- [inject](#dependency-injection)
+
+As a default, LoopBack also comes with some pre-defined component decorators for your use:
+
 - [authentication](#authentication-decorators)
 - [repository](#repository-decorators)
 
@@ -73,13 +76,14 @@ As a default, LoopBack comes with some pre-defined component decorators for your
   
 ## Dependency Injection
 
-@inject is a decorator to annotate method arguments for automatic injection by 
-LoopBack IoC container. @inject can only be used on properties or method parameters.
+`@inject` is a decorator to annotate method arguments for automatic injection by 
+LoopBack IoC container. `@inject` can only be used on properties or method parameters.
 
-The `@inject` decorator allows you inject dependencies bound to the application context, or
-to any implementation of the [Context](#context) object. You can bind values, class definitions and 
-provider functions to those contexts and then resolve values (or the results of functions that return those 
-values!) in other areas of your code.
+The `@inject` decorator allows you inject dependencies bound to the application context, 
+to the per-request contextor, to any implementation of the [Context](#context) object. 
+You can bind values, class definitions and provider functions to those contexts and 
+then resolve values (or the results of functions that return those values!) in other 
+areas of your code.
 
 ```ts
 // application.ts
@@ -102,9 +106,10 @@ inject it in our WidgetController:
 import {widgetSpec} from '../apispec';
 @api(widgetSpec)
 class WidgetController {
-  @inject('config.widget')
-  protected config: JSON; // This will be resolved at runtime!
-
+  constructor(
+    @inject('config.widget') protected widget: JSON
+    // This will be resolved at runtime!
+  ) {}
   // etc...
 }
 ```
@@ -143,11 +148,11 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 - @model
 
-  Define a model in a repository, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
+  Define a model in a repository, see [define-models](Repositories.html#define-models)
 
 - @property
 
-  Define a property in a model, see [define-models](http://loopback.io/doc/en/lb4/Repositories.html#define-models)
+  Define a property in a model, see [define-models](Repositories.html#define-models)
 
 ### Relation decorators
 
@@ -174,17 +179,10 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
   ```ts
   // my-controller.ts
-  import { Todo } from '{path_of_Todo_mode}.ts';
-  import { juggler, DataSourceConstructor } from '@loopback/repository';
-
-  const datasource = new DataSourceConstructor({
-    connector: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    database: 'test',
-    password: 'pass',
-    user: 'root',
-  });
+  // Know more about how to create model 'Todo' and datasource 'datasource', 
+  // please see example in [Thinking in LoopBack](Thinking-in-LoopBack.htm#define-product-model-repository-and-data-source)
+  import { Todo } from '{path_of_Todo_model}.ts';
+  import { datasource } from '{path_of_datasource}.ts';
 
   export class TodoController {
     @repository(Todo, datasource)
