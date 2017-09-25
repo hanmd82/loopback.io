@@ -19,37 +19,120 @@ and properties in a way that allows the framework to better understand how to
 make use of them, without the need to inherit base classes or add functions 
 that tie into an API.
 
-Currently, LoopBack core provides built-in decorator functions you can use directly
-by `@myDecorator`:
+As a default, LoopBack comes with some pre-defined decorators:
 
 - [route](#route-decorators)
 - [inject](#dependency-injection)
-
-As a default, LoopBack also comes with some pre-defined component decorators:
-
 - [authentication](#authentication-decorators)
 - [repository](#repository-decorators)
 
 ## Route Decorators
-- `@get`, `@post`, `@put`, `@patch`, `@del`
 
-  Register route for a controller by REST decorator, for their usage, refer to 
-  [Routing to Controllers](controllers.htm#Routing-to-Controllers)
+Route decorators are used to expose controller methods as REST API operations.
+If you are not familiar with the concept Route or Controller, please see [LoopBack Route](routes.htm)
+and [LoopBack Controller](controllers.htm) to learn more about them.
 
-- `@api`
+By calling a decorator, you provide OpenAPI specification to describe the endpoint 
+which the decorated method maps to:
 
-  Register route for a controller by api decorator, more details and example refer 
-  to [Specifying Controller APIs](controllers.htm#Specifying-Controller-APIs)
+### api
 
-- `@operation`
+  Syntax: `@api`
 
-  Expose a Controller method as a REST API operation. Usage refer to [TBD in Controllers](controllers.htm#)
+  `@api` is a decorator for controller constructor, it's called before a controller
+  class. `@api` is used when you have a `basePath` and a Paths Object, which
+  contain multiple path definitions. Please note the api specs defined with `@api`
+  will override other api specs defined inside the controller. For example:
 
-- `@param`
+  ```ts
+    @api({
+      basePath: '/',
+      paths: {
+        '/greet': {
+          get: {
+            'x-operation-name': 'greet',
+            'x-controller-name': 'MyController',
+            parameters: [{name: 'name', type: 'string', in: 'query'}],
+            responses: {
+              '200': {
+                description: 'greeting text',
+                schema: {type: 'string'},
+              }
+            }
+          }
+        }
+      }
+    })
+    class MyController {
+      // The operation endpoint defined here will be overriden!
+      @get('/foo')
+      @param.query.number('limit')
+      greet(name) {
+      }
+    }
+    app.controller(MyController);
+  ```
 
-  Describe an input parameter of a Controller method. 
+  A more detailed explanation can be found in [Specifying Controller APIs](controllers.htm#Specifying-Controller-APIs)
+
+### operation
+
+  Syntax: `@operation`
+
+  `@operation` is a controller method decorator. It exposes a Controller method as 
+  a REST API operation. You can specify the verb, path, parameters and response 
+  as specification of your endpoint, for example:
+
+  ```ts
+  const spec = {
+    parameters: [{name: 'name', type: 'string', in: 'query'}],
+    responses: {
+      '200': {
+        description: 'greeting text',
+        schema: {type: 'boolean'},
+      }
+    }
+  };
+  class MyController {
+    @operation('HEAD', '/checkExist', spec)
+    checkExist(name) {
+    }
+  }
+  ```
   
-  `@param` can be applied to method itself or specific parameters. For example,
+### commonly-used operations
+  
+  Syntax: `@get`, `@post`, `@put`, `@patch`, `@del`
+
+  You can call these suger operation decorators as a shortcut of `@operation`, for example:
+  ```ts
+  class MyController {
+    @get('/greet', spec)
+    greet(name) {
+    }
+  }
+  ```
+
+  is equivalent to
+
+  ```ts
+  class MyController {
+    @operation('GET', '/greet', spec)
+    greet(name) {
+    }
+  }
+  ```
+  
+  For more usage, refer to [Routing to Controllers](controllers.htm#Routing-to-Controllers)
+
+### param
+
+  Syntax: `@param`
+
+  `@param` can be applied to method itself or specific parameters, it describes
+  an input parameter of a Controller method.
+
+  For example:
 
   ```ts
     class MyController {
@@ -72,7 +155,15 @@ As a default, LoopBack also comes with some pre-defined component decorators:
     }
   ```
   
-  More example can be found in [Writing Controller methods](controller.htm#Writing-Controller-methods)
+  It follows this pattern to make it quicker to define params: `@param.${in}.${type}(${name})`
+  
+  - in: one of the following values: query, header, path, formData, body
+  - type: one of the following values:  string, number, boolean, integer
+  - name: a string, name of the parameter
+
+  So an example would be `@param.query.number('offset')`.
+
+  You can find the specific usage in [Writing Controller methods](controller.htm#Writing-Controller-methods)
   
 ## Dependency Injection
 
@@ -118,7 +209,7 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 ## Authentication Decorator
 
-- @authenticate
+  Syntax: `@authenticate`
 
   Mark a controller method as requiring authenticated user, takes a strategy name 
   as a parameter. An example is using 'BasicStrategy' to authenticate user in function
@@ -144,17 +235,22 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
 ## Repository Decorators
 
-### Model decorators
+### Model Decorators
 
-- `@model`
+#### model
 
-  Define a model in a repository, see [define-models](Repositories.html#define-models)
+  Syntax: `@model`
 
-- `@property`
+  Define the decorated class as a Model for use with the Legacy Juggler.
+  For usage examples, see [Define Models](Repositories.html#define-models)
 
-  Define a property in a model, see [define-models](Repositories.html#define-models)
+#### property
 
-### Relation decorators
+  Syntax: `@property`
+
+  Define the metadata for a Model property. For usage examples, see [Define Models](Repositories.html#define-models)
+
+### Relation Decorators
 
   *This feature has not yet been released in alpha form. Documentation will be* 
   *added here as this feature progresses.*
@@ -167,20 +263,23 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
 
   Register a specific relation
 
-### Repository decorator
+### Repository Decorator
 
-- `@repository`
-
+  Syntax: `@repository`
+  
   A repository represents a collection of data and the means to access that data, 
   the decorator either injects an existing repository or creates a repository 
   from a model and a datasource.
 
   The injection example can be found in [Repository#controller-configuration](Repositories.html#controller-configuration)
 
+  To create a repository in a controller, you can define your model and datasource 
+  first, then import them in your controller file:
+
+  *Know more about how to create model and datasource, please see example in [Thinking in LoopBack](Thinking-in-LoopBack.htm#define-product-model-repository-and-data-source)*
+  
   ```ts
   // my-controller.ts
-  // Know more about how to create model 'Todo' and datasource 'datasource', 
-  // please see example in [Thinking in LoopBack](Thinking-in-LoopBack.htm#define-product-model-repository-and-data-source)
   import { Todo } from '{path_of_Todo_model}.ts';
   import { datasource } from '{path_of_datasource}.ts';
 
@@ -202,6 +301,6 @@ For more information, see the [Dependency Injection](Dependency-Injection.htm) s
   export class TodoController {
     @repository('todo', 'ds')
     repository: EntityCrudRepository<Todo, number>;
-    ... ...
+    // etc
   }
   ```
